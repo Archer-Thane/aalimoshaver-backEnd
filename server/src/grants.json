@@ -31,31 +31,31 @@
   },
   {
     "role": "user",
-    "resource": "Test",
+    "resource": "Psychotherapist",
     "action": "read:own",
     "attributes": "*"
   },
   {
     "role": "user",
-    "resource": "Test",
+    "resource": "Psychotherapist",
     "action": "create:any",
     "attributes": "*"
   },
   {
     "role": "user",
-    "resource": "Test",
+    "resource": "Psychotherapist",
     "action": "update:any",
     "attributes": "*"
   },
   {
     "role": "user",
-    "resource": "Test",
+    "resource": "Psychotherapist",
     "action": "delete:any",
     "attributes": "*"
   },
   {
     "role": "user",
-    "resource": "Test",
+    "resource": "Psychotherapist",
     "action": "read:any",
     "attributes": "*"
   }
