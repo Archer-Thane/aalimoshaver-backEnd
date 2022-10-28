@@ -18,11 +18,244 @@ model User {
   username  String   @unique
 }
 
-model Test {
+model Psychotherapist {
+  cardNumber          String?
+  checkoutPayments    CheckoutPayment[]
+  createdAt           DateTime          @default(now())
+  firstName           String?
+  id                  String            @id @default(cuid())
+  lastName            String?
+  patients            Patient[]
+  phoneNumber         String?
+  pricePerHour        Int?
+  psychoSchedules     PsychoSchedule[]
+  sessions            Session[]
+  shabaNumber         String?
+  totalSessionsCount  Int?
+  totalSessionsLength Int?
+  updatedAt           DateTime          @updatedAt
+  waitingLists        WaitingList[]
+}
+
+model CheckoutPayment {
+  amount      Int?
+  createdAt   DateTime         @default(now())
+  id          String           @id @default(cuid())
+  month       Int?
+  psychoId    Psychotherapist? @relation(fields: [psychoIdId], references: [id])
+  psychoIdId  String?
+  resloveDate DateTime?
+  resolved    Boolean?
+  updatedAt   DateTime         @updatedAt
+  year        Int?
+}
+
+model PsychoSchedule {
+  beginTime  DateTime?
+  createdAt  DateTime         @default(now())
+  day        String?
+  endTime    DateTime?
+  id         String           @id @default(cuid())
+  psychoId   Psychotherapist? @relation(fields: [psychoIdId], references: [id])
+  psychoIdId String?
+  sessions   Session[]
+  updatedAt  DateTime         @updatedAt
+}
+
+model Session {
+  attendTime         DateTime?
+  createdAt          DateTime                @default(now())
+  desc               String?
+  id                 String                  @id @default(cuid())
+  length             Int?
+  patientId          Patient?                @relation(fields: [patientIdId], references: [id])
+  patientIdId        String?
+  payId              Payment?                @relation(name: "payId", fields: [payIdId], references: [id])
+  payIdId            String?
+  payments           Payment[]               @relation(name: "sessionId")
+  payStatus          EnumSessionPayStatus?
+  psychoId           Psychotherapist?        @relation(fields: [psychoIdId], references: [id])
+  psychoIdId         String?
+  psychoScheduleId   PsychoSchedule?         @relation(fields: [psychoScheduleIdId], references: [id])
+  psychoScheduleIdId String?
+  reportId           Report?                 @relation(fields: [reportIdId], references: [id])
+  reportIdId         String?
+  sessionType        EnumSessionSessionType?
+  status             EnumSessionStatus?
+  updatedAt          DateTime                @updatedAt
+}
+
+model Payment {
+  cost        Int?
+  createdAt   DateTime                 @default(now())
+  desc        String?
+  id          String                   @id @default(cuid())
+  paymentType EnumPaymentPaymentType[]
+  sessionId   Session?                 @relation(name: "sessionId", fields: [sessionIdId], references: [id])
+  sessionIdId String?
+  sessions    Session[]                @relation(name: "payId")
+  status      EnumPaymentStatus?
+  taxId       Tax?                     @relation(fields: [taxIdId], references: [id])
+  taxIdId     String?
+  updatedAt   DateTime                 @updatedAt
+}
+
+model Tax {
+  amount    Int?
+  createdAt DateTime       @default(now())
+  id        String         @id @default(cuid())
+  payments  Payment[]
+  status    EnumTaxStatus?
+  updatedAt DateTime       @updatedAt
+}
+
+model WaitingList {
+  callCounts      Int?
+  createdAt       DateTime         @default(now())
+  id              String           @id @default(cuid())
+  isEmergency     Boolean?
+  isFirstSession  Boolean?
+  lastRequestTime DateTime?
+  patientId       String?
+  priority        Int?
+  psychoId        Psychotherapist? @relation(fields: [psychoIdId], references: [id])
+  psychoIdId      String?
+  updatedAt       DateTime         @updatedAt
+}
+
+model Patient {
+  createdAt           DateTime           @default(now())
+  currentPsychoId     Psychotherapist[]
+  desc                String?
+  discount            Int?
+  firstName           String?
+  gender              EnumPatientGender?
+  hasPsychotherapist  Boolean?
+  id                  String             @id @default(cuid())
+  lastName            String?
+  lastSessionTime     DateTime?
+  patientGroups       PatientGroup[]
+  patientTraits       PatientTrait[]
+  phoneNumber         String?
+  questionaires       Questionaire[]
+  sessions            Session[]
+  status              EnumPatientStatus?
+  totalSessionsCount  Int?
+  totalSessionsLength String?
+  updatedAt           DateTime           @updatedAt
+}
+
+model PatientTrait {
+  createdAt   DateTime                   @default(now())
+  id          String                     @id @default(cuid())
+  name        String?
+  patientId   Patient?                   @relation(fields: [patientIdId], references: [id])
+  patientIdId String?
+  severity    Int?
+  traitType   EnumPatientTraitTraitType?
+  updatedAt   DateTime                   @updatedAt
+}
+
+model PatientGroup {
+  createdAt   DateTime                   @default(now())
+  groupType   EnumPatientGroupGroupType?
+  id          String                     @id @default(cuid())
+  patientId   Patient?                   @relation(fields: [patientIdId], references: [id])
+  patientIdId String?
+  updatedAt   DateTime                   @updatedAt
+}
+
+model Report {
+  createdAt     DateTime  @default(now())
+  desc          String?
+  id            String    @id @default(cuid())
+  sessionNumber Int?
+  sessions      Session[]
+  title         String?
+  updatedAt     DateTime  @updatedAt
+}
+
+model Questionaire {
+  attendDate  DateTime?
+  createdAt   DateTime  @default(now())
+  id          String    @id @default(cuid())
+  name        String?
+  patientId   Patient?  @relation(fields: [patientIdId], references: [id])
+  patientIdId String?
+  resultId    String?
+  updatedAt   DateTime  @updatedAt
+}
+
+model QuestionarieInterpretation {
   createdAt DateTime @default(now())
   id        String   @id @default(cuid())
-  test      Test?    @relation(name: "TestOnTests", fields: [testId], references: [id])
-  testId    String?
-  tests     Test[]   @relation(name: "TestOnTests")
   updatedAt DateTime @updatedAt
+}
+
+enum EnumSessionPayStatus {
+  UnPaid
+  FullyPaid
+  PartailPaid
+}
+
+enum EnumSessionSessionType {
+  Online
+  Offline
+  Mix
+}
+
+enum EnumSessionStatus {
+  Free
+  Reserved
+  FinalChecked
+  InProgress
+  Done
+}
+
+enum EnumPaymentPaymentType {
+  Cash
+  Card
+  CardToCard
+  Unpaid
+}
+
+enum EnumPaymentStatus {
+  PaidOff
+  Unpaid
+}
+
+enum EnumTaxStatus {
+  Unpaid
+  Paid
+}
+
+enum EnumPatientGender {
+  Male
+  Female
+  Other
+  NA
+}
+
+enum EnumPatientStatus {
+  HasNoPsychotherapist
+  OnReserveList
+  InsideSchedule
+  HasOneSession
+  HasThreeSessions
+  HasSixSessions
+  MoreThanSixSessions
+}
+
+enum EnumPatientTraitTraitType {
+  Positive
+  Negative
+}
+
+enum EnumPatientGroupGroupType {
+  Family
+  Wife
+  Husband
+  Child
+  Engaged
+  GroupTherapy
 }
