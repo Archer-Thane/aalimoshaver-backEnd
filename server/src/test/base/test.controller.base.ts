@@ -46,25 +46,10 @@ export class TestControllerBase {
   @swagger.ApiForbiddenResponse({ type: errors.ForbiddenException })
   async create(@common.Body() data: TestCreateInput): Promise<Test> {
     return await this.service.create({
-      data: {
-        ...data,
-
-        test: data.test
-          ? {
-              connect: data.test,
-            }
-          : undefined,
-      },
+      data: data,
       select: {
         createdAt: true,
         id: true,
-
-        test: {
-          select: {
-            id: true,
-          },
-        },
-
         updatedAt: true,
       },
     });
@@ -87,13 +72,6 @@ export class TestControllerBase {
       select: {
         createdAt: true,
         id: true,
-
-        test: {
-          select: {
-            id: true,
-          },
-        },
-
         updatedAt: true,
       },
     });
@@ -117,13 +95,6 @@ export class TestControllerBase {
       select: {
         createdAt: true,
         id: true,
-
-        test: {
-          select: {
-            id: true,
-          },
-        },
-
         updatedAt: true,
       },
     });
@@ -152,25 +123,10 @@ export class TestControllerBase {
     try {
       return await this.service.update({
         where: params,
-        data: {
-          ...data,
-
-          test: data.test
-            ? {
-                connect: data.test,
-              }
-            : undefined,
-        },
+        data: data,
         select: {
           createdAt: true,
           id: true,
-
-          test: {
-            select: {
-              id: true,
-            },
-          },
-
           updatedAt: true,
         },
       });
@@ -202,13 +158,6 @@ export class TestControllerBase {
         select: {
           createdAt: true,
           id: true,
-
-          test: {
-            select: {
-              id: true,
-            },
-          },
-
           updatedAt: true,
         },
       });
@@ -220,107 +169,5 @@ export class TestControllerBase {
       }
       throw error;
     }
-  }
-
-  @common.UseInterceptors(AclFilterResponseInterceptor)
-  @nestAccessControl.UseRoles({
-    resource: "Test",
-    action: "read",
-    possession: "any",
-  })
-  @common.Get("/:id/tests")
-  @ApiNestedQuery(TestFindManyArgs)
-  async findManyTests(
-    @common.Req() request: Request,
-    @common.Param() params: TestWhereUniqueInput
-  ): Promise<Test[]> {
-    const query = plainToClass(TestFindManyArgs, request.query);
-    const results = await this.service.findTests(params.id, {
-      ...query,
-      select: {
-        createdAt: true,
-        id: true,
-
-        test: {
-          select: {
-            id: true,
-          },
-        },
-
-        updatedAt: true,
-      },
-    });
-    if (results === null) {
-      throw new errors.NotFoundException(
-        `No resource was found for ${JSON.stringify(params)}`
-      );
-    }
-    return results;
-  }
-
-  @nestAccessControl.UseRoles({
-    resource: "Test",
-    action: "update",
-    possession: "any",
-  })
-  @common.Post("/:id/tests")
-  async connectTests(
-    @common.Param() params: TestWhereUniqueInput,
-    @common.Body() body: TestWhereUniqueInput[]
-  ): Promise<void> {
-    const data = {
-      tests: {
-        connect: body,
-      },
-    };
-    await this.service.update({
-      where: params,
-      data,
-      select: { id: true },
-    });
-  }
-
-  @nestAccessControl.UseRoles({
-    resource: "Test",
-    action: "update",
-    possession: "any",
-  })
-  @common.Patch("/:id/tests")
-  async updateTests(
-    @common.Param() params: TestWhereUniqueInput,
-    @common.Body() body: TestWhereUniqueInput[]
-  ): Promise<void> {
-    const data = {
-      tests: {
-        set: body,
-      },
-    };
-    await this.service.update({
-      where: params,
-      data,
-      select: { id: true },
-    });
-  }
-
-  @nestAccessControl.UseRoles({
-    resource: "Test",
-    action: "update",
-    possession: "any",
-  })
-  @common.Delete("/:id/tests")
-  async disconnectTests(
-    @common.Param() params: TestWhereUniqueInput,
-    @common.Body() body: TestWhereUniqueInput[]
-  ): Promise<void> {
-    const data = {
-      tests: {
-        disconnect: body,
-      },
-    };
-    await this.service.update({
-      where: params,
-      data,
-      select: { id: true },
-    });
   }
 }
