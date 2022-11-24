@@ -18,9 +18,6 @@ import * as gqlACGuard from "../../auth/gqlAC.guard";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
 import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
-import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
-import { CreateTestArgs } from "./CreateTestArgs";
-import { UpdateTestArgs } from "./UpdateTestArgs";
 import { DeleteTestArgs } from "./DeleteTestArgs";
 import { TestFindManyArgs } from "./TestFindManyArgs";
 import { TestFindUniqueArgs } from "./TestFindUniqueArgs";
@@ -80,59 +77,6 @@ export class TestResolverBase {
     return result;
   }
 
-  @common.UseInterceptors(AclValidateRequestInterceptor)
-  @graphql.Mutation(() => Test)
-  @nestAccessControl.UseRoles({
-    resource: "Test",
-    action: "create",
-    possession: "any",
-  })
-  async createTest(@graphql.Args() args: CreateTestArgs): Promise<Test> {
-    return await this.service.create({
-      ...args,
-      data: {
-        ...args.data,
-
-        test: args.data.test
-          ? {
-              connect: args.data.test,
-            }
-          : undefined,
-      },
-    });
-  }
-
-  @common.UseInterceptors(AclValidateRequestInterceptor)
-  @graphql.Mutation(() => Test)
-  @nestAccessControl.UseRoles({
-    resource: "Test",
-    action: "update",
-    possession: "any",
-  })
-  async updateTest(@graphql.Args() args: UpdateTestArgs): Promise<Test | null> {
-    try {
-      return await this.service.update({
-        ...args,
-        data: {
-          ...args.data,
-
-          test: args.data.test
-            ? {
-                connect: args.data.test,
-              }
-            : undefined,
-        },
-      });
-    } catch (error) {
-      if (isRecordNotFoundError(error)) {
-        throw new apollo.ApolloError(
-          `No resource was found for ${JSON.stringify(args.where)}`
-        );
-      }
-      throw error;
-    }
-  }
-
   @graphql.Mutation(() => Test)
   @nestAccessControl.UseRoles({
     resource: "Test",
@@ -150,41 +94,5 @@ export class TestResolverBase {
       }
       throw error;
     }
-  }
-
-  @common.UseInterceptors(AclFilterResponseInterceptor)
-  @graphql.ResolveField(() => [Test])
-  @nestAccessControl.UseRoles({
-    resource: "Test",
-    action: "read",
-    possession: "any",
-  })
-  async tests(
-    @graphql.Parent() parent: Test,
-    @graphql.Args() args: TestFindManyArgs
-  ): Promise<Test[]> {
-    const results = await this.service.findTests(parent.id, args);
-
-    if (!results) {
-      return [];
-    }
-
-    return results;
-  }
-
-  @common.UseInterceptors(AclFilterResponseInterceptor)
-  @graphql.ResolveField(() => Test, { nullable: true })
-  @nestAccessControl.UseRoles({
-    resource: "Test",
-    action: "read",
-    possession: "any",
-  })
-  async test(@graphql.Parent() parent: Test): Promise<Test | null> {
-    const result = await this.service.getTest(parent.id);
-
-    if (!result) {
-      return null;
-    }
-    return result;
   }
 }
