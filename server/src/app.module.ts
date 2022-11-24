@@ -2,6 +2,19 @@ import { Module, Scope } from "@nestjs/common";
 import { APP_INTERCEPTOR } from "@nestjs/core";
 import { MorganInterceptor, MorganModule } from "nest-morgan";
 import { UserModule } from "./user/user.module";
+import { PsychotherapistModule } from "./psychotherapist/psychotherapist.module";
+import { CheckoutPaymentModule } from "./checkoutPayment/checkoutPayment.module";
+import { PsychoScheduleModule } from "./psychoSchedule/psychoSchedule.module";
+import { SessionModule } from "./session/session.module";
+import { PaymentModule } from "./payment/payment.module";
+import { TaxModule } from "./tax/tax.module";
+import { WaitingListModule } from "./waitingList/waitingList.module";
+import { PatientModule } from "./patient/patient.module";
+import { PatientTraitModule } from "./patientTrait/patientTrait.module";
+import { PatientGroupModule } from "./patientGroup/patientGroup.module";
+import { ReportModule } from "./report/report.module";
+import { QuestionaireModule } from "./questionaire/questionaire.module";
+import { QuestionarieInterpretationModule } from "./questionarieInterpretation/questionarieInterpretation.module";
 import { TestModule } from "./test/test.module";
 import { ACLModule } from "./auth/acl.module";
 import { AuthModule } from "./auth/auth.module";
@@ -16,6 +29,19 @@ import { GraphQLModule } from "@nestjs/graphql";
   controllers: [],
   imports: [
     UserModule,
+    PsychotherapistModule,
+    CheckoutPaymentModule,
+    PsychoScheduleModule,
+    SessionModule,
+    PaymentModule,
+    TaxModule,
+    WaitingListModule,
+    PatientModule,
+    PatientTraitModule,
+    PatientGroupModule,
+    ReportModule,
+    QuestionaireModule,
+    QuestionarieInterpretationModule,
     TestModule,
     ACLModule,
     AuthModule,

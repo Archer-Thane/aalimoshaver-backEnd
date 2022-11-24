@@ -13,9 +13,7 @@ import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { StringFilter } from "../../util/StringFilter";
 import { Type } from "class-transformer";
-import { IsOptional, ValidateNested } from "class-validator";
-import { TestWhereUniqueInput } from "./TestWhereUniqueInput";
-import { TestListRelationFilter } from "./TestListRelationFilter";
+import { IsOptional } from "class-validator";
 @InputType()
 class TestWhereInput {
   @ApiProperty({
@@ -28,29 +26,5 @@ class TestWhereInput {
     nullable: true,
   })
   id?: StringFilter;
-
-  @ApiProperty({
-    required: false,
-    type: () => TestWhereUniqueInput,
-  })
-  @ValidateNested()
-  @Type(() => TestWhereUniqueInput)
-  @IsOptional()
-  @Field(() => TestWhereUniqueInput, {
-    nullable: true,
-  })
-  test?: TestWhereUniqueInput;
-
-  @ApiProperty({
-    required: false,
-    type: () => TestListRelationFilter,
-  })
-  @ValidateNested()
-  @Type(() => TestListRelationFilter)
-  @IsOptional()
-  @Field(() => TestListRelationFilter, {
-    nullable: true,
-  })
-  tests?: TestListRelationFilter;
 }
 export { TestWhereInput };

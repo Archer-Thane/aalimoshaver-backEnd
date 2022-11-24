@@ -46,23 +46,4 @@ export class TestServiceBase {
   ): Promise<Test> {
     return this.prisma.test.delete(args);
   }
-
-  async findTests(
-    parentId: string,
-    args: Prisma.TestFindManyArgs
-  ): Promise<Test[]> {
-    return this.prisma.test
-      .findUnique({
-        where: { id: parentId },
-      })
-      .tests(args);
-  }
-
-  async getTest(parentId: string): Promise<Test | null> {
-    return this.prisma.test
-      .findUnique({
-        where: { id: parentId },
-      })
-      .test();
-  }
 }

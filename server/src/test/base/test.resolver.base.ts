@@ -18,9 +18,6 @@ import * as gqlACGuard from "../../auth/gqlAC.guard";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
 import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
-import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
-import { CreateTestArgs } from "./CreateTestArgs";
-import { UpdateTestArgs } from "./UpdateTestArgs";
 import { DeleteTestArgs } from "./DeleteTestArgs";
 import { TestFindManyArgs } from "./TestFindManyArgs";
 import { TestFindUniqueArgs } from "./TestFindUniqueArgs";
@@ -78,59 +75,6 @@ export class TestResolverBase {
       return null;
     }
     return result;
-  }
-
-  @common.UseInterceptors(AclValidateRequestInterceptor)
-  @graphql.Mutation(() => Test)
-  @nestAccessControl.UseRoles({
-    resource: "Test",
-    action: "create",
-    possession: "any",
-  })
-  async createTest(@graphql.Args() args: CreateTestArgs): Promise<Test> {
-    return await this.service.create({
-      ...args,
-      data: {
-        ...args.data,
-
-        test: args.data.test
-          ? {
-              connect: args.data.test,
-            }
-          : undefined,
-      },
-    });
-  }
-
-  @common.UseInterceptors(AclValidateRequestInterceptor)
-  @graphql.Mutation(() => Test)
-  @nestAccessControl.UseRoles({
-    resource: "Test",
-    action: "update",
-    possession: "any",
-  })
-  async updateTest(@graphql.Args() args: UpdateTestArgs): Promise<Test | null> {
-    try {
-      return await this.service.update({
-        ...args,
-        data: {
-          ...args.data,
-
-          test: args.data.test
-            ? {
-                connect: args.data.test,
-              }
-            : undefined,
-        },
-      });
-    } catch (error) {
-      if (isRecordNotFoundError(error)) {
-        throw new apollo.ApolloError(
-          `No resource was found for ${JSON.stringify(args.where)}`
-        );
-      }
-      throw error;
-    }
   }
 
   @graphql.Mutation(() => Test)

@@ -9,36 +9,5 @@ https://docs.amplication.com/docs/how-to/custom-code
 
 ------------------------------------------------------------------------------
   */
-import { InputType, Field } from "@nestjs/graphql";
-import { ApiProperty } from "@nestjs/swagger";
-import { TestWhereUniqueInput } from "./TestWhereUniqueInput";
-import { ValidateNested, IsOptional } from "class-validator";
-import { Type } from "class-transformer";
-import { TestUpdateManyWithoutTestsInput } from "./TestUpdateManyWithoutTestsInput";
-@InputType()
-class TestUpdateInput {
-  @ApiProperty({
-    required: false,
-    type: () => TestWhereUniqueInput,
-  })
-  @ValidateNested()
-  @Type(() => TestWhereUniqueInput)
-  @IsOptional()
-  @Field(() => TestWhereUniqueInput, {
-    nullable: true,
-  })
-  test?: TestWhereUniqueInput | null;
-
-  @ApiProperty({
-    required: false,
-    type: () => TestUpdateManyWithoutTestsInput,
-  })
-  @ValidateNested()
-  @Type(() => TestUpdateManyWithoutTestsInput)
-  @IsOptional()
-  @Field(() => TestUpdateManyWithoutTestsInput, {
-    nullable: true,
-  })
-  tests?: TestUpdateManyWithoutTestsInput;
-}
+class TestUpdateInput {}
 export { TestUpdateInput };
