@@ -152,39 +152,39 @@ export class TestResolverBase {
     }
   }
 
-  @common.UseInterceptors(AclFilterResponseInterceptor)
-  @graphql.ResolveField(() => [Test])
-  @nestAccessControl.UseRoles({
-    resource: "Test",
-    action: "read",
-    possession: "any",
-  })
-  async tests(
-    @graphql.Parent() parent: Test,
-    @graphql.Args() args: TestFindManyArgs
-  ): Promise<Test[]> {
-    const results = await this.service.findTests(parent.id, args);
+  // @common.UseInterceptors(AclFilterResponseInterceptor)
+  // @graphql.ResolveField(() => [Test])
+  // @nestAccessControl.UseRoles({
+  //   resource: "Test",
+  //   action: "read",
+  //   possession: "any",
+  // })
+  // async tests(
+  //   @graphql.Parent() parent: Test,
+  //   @graphql.Args() args: TestFindManyArgs
+  // ): Promise<Test[]> {
+  //   const results = await this.service.findTests(parent.id, args);
 
-    if (!results) {
-      return [];
-    }
+  //   if (!results) {
+  //     return [];
+  //   }
 
-    return results;
-  }
+  //   return results;
+  // }
 
-  @common.UseInterceptors(AclFilterResponseInterceptor)
-  @graphql.ResolveField(() => Test, { nullable: true })
-  @nestAccessControl.UseRoles({
-    resource: "Test",
-    action: "read",
-    possession: "any",
-  })
-  async test(@graphql.Parent() parent: Test): Promise<Test | null> {
-    const result = await this.service.getTest(parent.id);
+  // @common.UseInterceptors(AclFilterResponseInterceptor)
+  // @graphql.ResolveField(() => Test, { nullable: true })
+  // @nestAccessControl.UseRoles({
+  //   resource: "Test",
+  //   action: "read",
+  //   possession: "any",
+  // })
+  // async test(@graphql.Parent() parent: Test): Promise<Test | null> {
+  //   const result = await this.service.getTest(parent.id);
 
-    if (!result) {
-      return null;
-    }
-    return result;
-  }
+  //   if (!result) {
+  //     return null;
+  //   }
+  //   return result;
+  // }
 }

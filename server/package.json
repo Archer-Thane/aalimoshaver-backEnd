@@ -29,10 +29,12 @@
     "@nestjs/serve-static": "2.2.2",
     "@nestjs/swagger": "5.1.5",
     "@prisma/client": "3.15.2",
+    "accesscontrol": "^2.2.1",
     "apollo-server-express": "3.6.1",
     "bcrypt": "5.0.1",
     "class-transformer": "0.5.1",
     "class-validator": "0.13.2",
+    "dotenv": "^16.0.3",
     "graphql": "15.7.2",
     "graphql-type-json": "0.3.2",
     "nest-access-control": "2.0.3",
@@ -43,6 +45,7 @@
     "passport-http": "0.3.0",
     "passport-jwt": "4.0.0",
     "reflect-metadata": "0.1.13",
+    "rxjs": "^7.5.7",
     "swagger-ui-express": "4.3.0",
     "ts-node": "9.1.1"
   },
@@ -68,6 +71,8 @@
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node",
-    "modulePathIgnorePatterns": ["<rootDir>/dist/"]
+    "modulePathIgnorePatterns": [
+      "<rootDir>/dist/"
+    ]
   }
 }

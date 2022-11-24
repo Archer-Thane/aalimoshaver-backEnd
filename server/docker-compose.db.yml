@@ -1,7 +1,7 @@
 version: "3"
 services:
   db:
-    image: postgres:12
+    image: m.docker-registry.ir/postgres:12
     ports:
       - ${DB_PORT}:5432
     environment:
